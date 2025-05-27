@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Restaurant Menu Card</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f9fc;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px 35px;
+            border-radius: 8px;
+            box-shadow: 0 0 12px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+        }
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #0078d7;
+            color: white;
+        }
+        input[type="number"] {
+            width: 60px;
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        #totalBill {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: right;
+            margin-top: 10px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #0078d7;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #005a9e;
+        }
+    </style>
+    <!-- Firebase App (core) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <!-- Firebase Realtime Database -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>Restaurant Menu Card</h2>
+        <form id="menuForm">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Price ($)</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Margherita Pizza</td>
+                        <td>12</td>
+                        <td><input type="number" name="Margherita Pizza" min="0" value="0" /></td>
+                    </tr>
+                    <tr>
+                        <td>Caesar Salad</td>
+                        <td>8</td>
+                        <td><input type="number" name="Caesar Salad" min="0" value="0" /></td>
+                    </tr>
+                    <tr>
+                        <td>Grilled Chicken</td>
+                        <td>15</td>
+                        <td><input type="number" name="Grilled Chicken" min="0" value="0" /></td>
+                    </tr>
+                    <tr>
+                        <td>Spaghetti Bolognese</td>
+                        <td>14</td>
+                        <td><input type="number" name="Spaghetti Bolognese" min="0" value="0" /></td>
+                    </tr>
+                    <tr>
+                        <td>Chocolate Cake</td>
+                        <td>6</td>
+                        <td><input type="number" name="Chocolate Cake" min="0" value="0" /></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div id="totalBill">Total Bill: $0</div>
+            <button type="submit">Calculate Total</button>
+        </form>
+    </div>
+    <script>
+        // Replace with your Firebase project credentials
+        const firebaseConfig = {
+    apiKey: "AIzaSyAs2SE5R0hN0hybiyebzHkAQHsRrSOBAxM",
+    authDomain: "webdevelopment-1b2d4.firebaseapp.com",
+    projectId: "webdevelopment-1b2d4",
+    storageBucket: "webdevelopment-1b2d4.firebasestorage.app",
+    messagingSenderId: "698908376973",
+    appId: "1:698908376973:web:c6504a154ac2b92086c7c4",
+    measurementId: "G-8RBK7NND2N"
+  };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        const menuForm = document.getElementById('menuForm');
+        const totalBillDiv = document.getElementById('totalBill');
+
+        menuForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            let total = 0;
+            const orderDetails = {};
+            const rows = menuForm.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                const item = row.cells[0].textContent;
+                const price = parseFloat(row.cells[1].textContent);
+                const quantityInput = row.cells[2].querySelector('input');
+                const quantity = parseInt(quantityInput.value) || 0;
+                if (quantity > 0) {
+                    orderDetails[item] = { price, quantity };
+                    total += price * quantity;
+                }
+            });
+            totalBillDiv.textContent = 'Total Bill: $' + total.toFixed(2);
+
+            if (total > 0) {
+                const newKey = database.ref().child('restaurantOrders').push().key;
+                const updates = {};
+                updates['/restaurantOrders/' + newKey] = { orderDetails, total, orderedAt: new Date().toISOString() };
+
+                database.ref().update(updates)
+                    .then(() => {
+                        alert('Order submitted successfully!');
+                        menuForm.reset();
+                        totalBillDiv.textContent = 'Total Bill: $0';
+                    })
+                    .catch((error) => {
+                        alert('Order submission failed. Please try again.');
+                        console.error(error);
+                    });
+            } else {
+                alert('Please select at least one item to order.');
+            }
+        });
+    </script>
+</body>
+</html>
