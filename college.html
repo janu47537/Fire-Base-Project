@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>College Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f7f9fc;
+        }
+        header {
+            background-color: #0078d7;
+            padding: 15px 20px;
+            color: white;
+        }
+        nav a {
+            color: white;
+            margin-right: 20px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        main {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        p {
+            font-size: 18px;
+            color: #555;
+            line-height: 1.6;
+            max-width: 700px;
+            margin: 20px auto;
+            text-align: center;
+        }
+        footer {
+            background-color: #0078d7;
+            color: white;
+            text-align: center;
+            padding: 15px 20px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+    <!-- Firebase App (core) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script>
+        // Firebase config
+      const firebaseConfig = {
+    apiKey: "AIzaSyAs2SE5R0hN0hybiyebzHkAQHsRrSOBAxM",
+    authDomain: "webdevelopment-1b2d4.firebaseapp.com",
+    projectId: "webdevelopment-1b2d4",
+    storageBucket: "webdevelopment-1b2d4.firebasestorage.app",
+    messagingSenderId: "698908376973",
+    appId: "1:698908376973:web:c6504a154ac2b92086c7c4",
+    measurementId: "G-8RBK7NND2N"
+  };
+
+        firebase.initializeApp(firebaseConfig);
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="college.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="courses.html">Courses</a>
+            <a href="admissions.html">Admissions</a>
+            <a href="contactus.html">Contact Us</a>
+            <a href="otherdetails.html">Other Details</a>
+            <a href="login.html">Login</a>
+            <a href="signup.html">Sign Up</a>
+        </nav>
+    </header>
+    <main>
+        <h1>Welcome to Our College</h1>
+        <p>Explore our courses, admissions process, and campus life. Use the navigation above to learn more about our college and get started on your educational journey.</p>
+    </main>
+    <footer>
+        &copy; 2024 Our College. All rights reserved.
+    </footer>
+</body>
+</html>
